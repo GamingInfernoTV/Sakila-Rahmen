@@ -14,6 +14,8 @@ public class DBModel {
     private static DBModel instance = new DBModel();
     private static Connection connection;
     private static Statement statement;
+    ResultSet _resultSet;
+
 
     private DBModel(){
         try {
@@ -25,12 +27,7 @@ public class DBModel {
     }
 
     public void query() {
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM film");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
 
@@ -39,4 +36,15 @@ public class DBModel {
     }
 
 
+    public ResultSet executeQuery(String query) {
+        try {
+            statement = connection.createStatement();
+            _resultSet = statement.executeQuery(query);
+
+            return _resultSet;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

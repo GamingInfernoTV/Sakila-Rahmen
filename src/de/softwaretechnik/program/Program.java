@@ -3,6 +3,7 @@ package de.softwaretechnik.program;
 import java.sql.*;
 
 import de.softwaretechnik.controller.MainWindowController;
+import de.softwaretechnik.models.Category;
 import de.softwaretechnik.models.DBModel;
 import de.softwaretechnik.models.Model;
 import de.softwaretechnik.views.MainWindow;
@@ -20,6 +21,9 @@ public class Program {
 		// lose Kopplung von GUI und Datenmodel
 		Model model = new Model();
 		MainWindow mw = MainWindow.getInstance();
+
+		model.returnAllCategories();
+
 
 		MainWindowController mc = new MainWindowController(mw, model);
 		mc.startProgram();
