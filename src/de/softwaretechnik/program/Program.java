@@ -22,7 +22,7 @@ public class Program {
 		Model model = new Model();
 		MainWindow mw = MainWindow.getInstance();
 
-		model.returnAllCategories();
+		model.getAllCategories();
 
 
 		MainWindowController mc = new MainWindowController(mw, model);

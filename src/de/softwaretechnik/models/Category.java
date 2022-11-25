@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Category {
-    private static final String _query = "SELECT * FROM category";
+    private static final String _query = "SELECT category_id, name FROM category";
     private int _id;
     private String _name;
 
