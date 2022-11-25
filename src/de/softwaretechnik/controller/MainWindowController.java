@@ -1,10 +1,13 @@
 package de.softwaretechnik.controller;
 
 import de.softwaretechnik.interfaces.IMainListener;
+import de.softwaretechnik.models.Category;
 import de.softwaretechnik.models.Model;
 import de.softwaretechnik.views.MainWindow;
 
 import java.awt.event.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MainWindowController extends WindowAdapter implements IMainListener {
 
@@ -50,7 +53,16 @@ public class MainWindowController extends WindowAdapter implements IMainListener
 
     @Override
     public void windowOpened(WindowEvent e) {
-         window.createGUI();
+        window.createGUI();
+        ArrayList<Category> categorys;
+        try {
+            categorys = model.getAllCategories();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        for (int i = 0; i < categorys.size();i++ ) {
+            window.GenreChoice.add(String.valueOf(categorys.get(i)));
+        }
     }
 
 
