@@ -12,4 +12,17 @@ public class Model {
     public ArrayList<Category> getAllCategories() throws SQLException {
         return Category.readCategories();
     }
+
+    public ArrayList<Actor> getAllActors() throws SQLException {
+        return Actor.readActors();
+    }
+
+    public ArrayList<Movie> getAllMovies() throws SQLException {
+        return Movie.readMovies();
+    }
+
+    public ArrayList<MovieConnection> getAllMovieConnections() throws SQLException {
+        System.out.println(MovieConnection.readMovieConnections());
+        return null;
+    }
 }

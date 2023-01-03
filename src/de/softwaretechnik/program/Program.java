@@ -23,6 +23,9 @@ public class Program {
 		MainWindow mw = MainWindow.getInstance();
 
 		model.getAllCategories();
+		model.getAllActors();
+		model.getAllMovies();
+		model.getAllMovieConnections();
 
 
 		MainWindowController mc = new MainWindowController(mw, model);
