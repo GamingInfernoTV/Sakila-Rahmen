@@ -38,17 +38,14 @@ public class MainWindowController extends WindowAdapter implements IMainListener
     // Events
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-
     }
 
     @Override
     public void textValueChanged(TextEvent e) {
-
     }
 
     @Override
@@ -63,9 +60,17 @@ public class MainWindowController extends WindowAdapter implements IMainListener
         for (int i = 0; i < categorys.size();i++ ) {
             window.GenreChoice.add(String.valueOf(categorys.get(i)));
         }
+        window.GenreChoice.select(0);
+        try {
+            window.drawCategory(window.setCat(window.GenreChoice.getSelectedItem()));
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-
+    public String getValue() {
+        return window.GenreChoice.getSelectedItem();
+    }
 
 
     @Override

@@ -37,11 +37,10 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie:" +
-                _filmID +
+        return "Movie:" + _filmID +
                 " " + _releaseYear +
                 " , " + _length +
-                " title: " + _title + '\'' +
-                " description: '" + _description + '\'';
+                " title: " + _title +
+                " description: '" + _description + '\n';
     }
 }

@@ -6,6 +6,7 @@ import de.softwaretechnik.controller.MainWindowController;
 import de.softwaretechnik.models.Category;
 import de.softwaretechnik.models.DBModel;
 import de.softwaretechnik.models.Model;
+import de.softwaretechnik.models.MovieConnection;
 import de.softwaretechnik.views.MainWindow;
 
 
@@ -25,7 +26,7 @@ public class Program {
 		model.getAllCategories();
 		model.getAllActors();
 		model.getAllMovies();
-		model.getAllMovieConnections();
+		//model.getAllMovieConnections();
 
 
 		MainWindowController mc = new MainWindowController(mw, model);

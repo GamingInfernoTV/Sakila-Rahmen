@@ -5,47 +5,48 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MovieConnection {
-    private static final String _query = "SELECT film_category.film_id, film.film_id, film_category.category_id, category.category_id, film.title, category.name FROM film_category, film, category" +
-            " JOIN film ON film_category.film_id = film.film_id" +
-            " GROUP BY film_category.film_id";
+    /**
+     * "SELECT film_category.film_id, film.film_id, film_category.category_id, category.category_id, category.name FROM film_category, category" +
+     *             " INNER JOIN film ON film_category.film_id = film.film_id"
+     */
+    private static final String _queryPart1 = "SELECT film_category.film_id, film.title, film_category.category_id, category.name " +
+                                            "FROM film_category " +
+                                            "INNER JOIN film ON film.film_id = film_category.film_id " +
+                                            "INNER JOIN category ON category.category_id = film_category.category_id " +
+                                            "WHERE category.category_id = ";
+    private static final String _queryPart2 = " GROUP BY title;";
+    private int _queryCategory;
     private int _filmCategoryFilmId;
-    private int _filmFilmId;
-    private int _filmId;
-    private int _filmCategoryCategoryId;
-    private int _categoryCategoryId;
     private String _filmTitel;
+    private int _filmCategoryCategoryId;
     private String _categoryName;
 
-    private MovieConnection (int _filmId, int _filmCategoryCategoryId, int _categoryCategoryId, String _filmTitel, String _categoryName) {
-        this._filmId = _filmId;
-        this._filmCategoryCategoryId = _filmCategoryCategoryId;
-        this._categoryCategoryId = _categoryCategoryId;
+    //(int _filmFilmId, int _filmCategoryCategoryId, int _categoryCategoryId, String _filmTitel, String _categoryName)
+    public MovieConnection (int _filmCategoryFilmId, String _filmTitel, int _filmCategoryCategoryId, String _categoryName) {
+        this._filmCategoryFilmId = _filmCategoryFilmId;
         this._filmTitel = _filmTitel;
+        this._filmCategoryCategoryId = _filmCategoryCategoryId;
         this._categoryName = _categoryName;
     }
 
-    public static ArrayList<MovieConnection> readMovieConnections() throws SQLException {
+    public static ArrayList<MovieConnection> readMovieConnections(int cat) throws SQLException {
         ArrayList<MovieConnection> movieConnectionCollection = new ArrayList<>();
-        ResultSet rs = DBModel.getInstance().executeQuery(_query);
+        ResultSet rs = DBModel.getInstance().executeQuery(_queryPart1 + cat + _queryPart2);
         while (rs.next()) {
-            rs.getInt(1);
-            rs.getInt(2);
-            rs.getInt(3);
-            rs.getString(4);
-            rs.getString(5);
+            movieConnectionCollection.add(new MovieConnection(
+                    rs.getInt(1),
+            rs.getString(2),
+            rs.getInt(3),
+            rs.getString(4)
+            ));
+
         }
         return movieConnectionCollection;
     }
 
     @Override
     public String toString() {
-        return "MovieConnection:" +
-                "_filmCategoryFilmId=" + _filmCategoryFilmId +
-                ", _filmFilmId=" + _filmFilmId +
-                ", _filmCategoryCategoryId=" + _filmCategoryCategoryId +
-                ", _categoryCategoryId=" + _categoryCategoryId +
-                ", _filmTitel='" + _filmTitel + '\'' +
-                ", _categoryName='" + _categoryName + '\'' +
-                '}';
+        return "Movie: " + _filmTitel +
+                " Category: " + _categoryName + '\n';
     }
 }
