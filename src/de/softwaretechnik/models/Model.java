@@ -21,7 +21,7 @@ public class Model {
         return Movie.readMovies();
     }
 
-    public ArrayList<MovieConnection> getAllMovieConnections(int cat) throws SQLException {
-        return MovieConnection.readMovieConnections(cat);
+    public ArrayList<MovieConnection> getAllMovieConnections(int category, String title) throws SQLException {
+        return MovieConnection.readMovieConnections(category, title);
     }
 }

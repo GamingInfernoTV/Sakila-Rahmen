@@ -2,11 +2,11 @@ package de.softwaretechnik.views;
 
 import de.softwaretechnik.models.Model;
 import de.softwaretechnik.models.MovieConnection;
+import de.softwaretechnik.models.SelectedCategory;
 import de.softwaretechnik.program.Program;
 
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,6 +20,8 @@ public class MainWindow extends Frame {
 	// ------------------------------------------------------------------------------------------------
 	// Singleton
 	private static MainWindow window = new MainWindow();
+	private final SelectedCategory selectedCategory = new SelectedCategory();
+
 	public static MainWindow getInstance(){
 		return window;
 	}
@@ -27,7 +29,10 @@ public class MainWindow extends Frame {
 
 	public final Choice GenreChoice = new Choice();
 	public final TextField testfield = new TextField();
+	public final TextField textField = new TextField();
 	public final TextArea textArea = new TextArea();
+	public final Button button = new Button();
+	public final Checkbox checkbox = new Checkbox();
 	// GUI Elements
 	private MenuBar _menuBar;
 
@@ -40,78 +45,49 @@ public class MainWindow extends Frame {
 		setTitle(Program.APP_TITLE + " [" + Program.APP_V + "]");
 		setSize(500,600);
 		setBackground(Color.darkGray);
-		setLayout(new GridLayout(3,1));
-		add(GenreChoice,BorderLayout.NORTH);
+		setResizable(false);
+		button.setLabel("Search");
+		textArea.setEditable(false);
+		textField.setSize(300, 20);
+
+		Panel panel = new Panel();
+		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panel.add(textField);
+		textField.setPreferredSize(textField.getSize());
+		panel.add(GenreChoice);
+		panel.add(button);
+
+		setLayout(new BorderLayout());
+		add(panel,BorderLayout.NORTH);
 		add(textArea, BorderLayout.CENTER);
-		GenreChoice.addItemListener(new ItemListener() {
+		add(checkbox, BorderLayout.SOUTH);
+
+		button.addActionListener(new ActionListener() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				try {
-					drawCategory(setCat(String.valueOf(e.getItem())));
+					int selectedCat = selectedCategory.setCat(GenreChoice.getSelectedItem());
+					String selectedTitle = textField.getText();
+					drawCategory(selectedCat, selectedTitle);
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
+		textField.addTextListener(new TextListener() {
+			@Override
+			public void textValueChanged(TextEvent e) {
+				try {
+					int selectedCat = selectedCategory.setCat(GenreChoice.getSelectedItem());
+					String selectedTitle = textField.getText();
+					drawCategory(selectedCat, selectedTitle);
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+				System.out.println("textField changed");
+			}
+		});
 		createGUI();
-	}
-
-	public int setCat(String s) {
-		int cat = 0;
-		switch (s) {
-			case "Action":
-				cat = 1;
-				break;
-			case "Animation":
-				cat = 2;
-				break;
-			case "Children":
-				cat = 3;
-				break;
-			case "Classics":
-				cat = 4;
-				break;
-			case "Comedy":
-				cat = 5;
-				break;
-			case "Documentary":
-				cat = 6;
-				break;
-			case "Drama":
-				cat = 7;
-				break;
-			case "Family":
-				cat = 8;
-				break;
-			case "Foreign":
-				cat = 9;
-				break;
-			case "Games":
-				cat = 10;
-				break;
-			case "Horror":
-				cat = 11;
-				break;
-			case "Music":
-				cat = 12;
-				break;
-			case "New":
-				cat = 13;
-				break;
-			case "Sci-Fi":
-				cat = 14;
-				break;
-			case "Sports":
-				cat = 15;
-				break;
-			case "Travel":
-				cat = 16;
-				break;
-			default:
-				System.out.println("ungültige Kategorie!");
-				break;
-		}
-		return cat;
 	}
 
 	public void createGUI(){
@@ -158,12 +134,12 @@ public class MainWindow extends Frame {
 		return menuBar;
 	}
 
-	public void drawCategory(int selectedCategory) throws SQLException {
-		window.textArea.setText("");
+	public void drawCategory(int selectedCategory, String selectedTitle) throws SQLException {
+		textArea.setText("");
 		ArrayList<MovieConnection> movieConnections;
-		movieConnections = model.getAllMovieConnections(selectedCategory);
+		movieConnections = model.getAllMovieConnections(selectedCategory, selectedTitle);
 		for (int i = 0; i < movieConnections.size(); i++) {
-			window.textArea.append(String.valueOf(movieConnections.get(i)));
+			textArea.append(String.valueOf(movieConnections.get(i)));
 		}
 	}
 

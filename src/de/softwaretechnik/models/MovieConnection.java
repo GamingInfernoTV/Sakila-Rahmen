@@ -5,16 +5,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MovieConnection {
-    /**
-     * "SELECT film_category.film_id, film.film_id, film_category.category_id, category.category_id, category.name FROM film_category, category" +
-     *             " INNER JOIN film ON film_category.film_id = film.film_id"
-     */
     private static final String _queryPart1 = "SELECT film_category.film_id, film.title, film_category.category_id, category.name " +
                                             "FROM film_category " +
                                             "INNER JOIN film ON film.film_id = film_category.film_id " +
                                             "INNER JOIN category ON category.category_id = film_category.category_id " +
                                             "WHERE category.category_id = ";
-    private static final String _queryPart2 = " GROUP BY title;";
+    private static final String _queryPart2 = " AND film.title LIKE '";
+    private static final String _queryPart3 = "%' OR category.category_id = ";
+    private static final String _queryPart4 = " AND film.title LIKE '%";
+    private static final String _queryPart5 = "%' OR category.category_id = ";
+    private static final String _queryPart6 = " AND film.title LIKE '%";
+    private static final String _queryPart7 = "%' GROUP BY title;";
     private int _queryCategory;
     private int _filmCategoryFilmId;
     private String _filmTitel;
@@ -29,9 +30,17 @@ public class MovieConnection {
         this._categoryName = _categoryName;
     }
 
-    public static ArrayList<MovieConnection> readMovieConnections(int cat) throws SQLException {
+    public static ArrayList<MovieConnection> readMovieConnections(int category, String title) throws SQLException {
         ArrayList<MovieConnection> movieConnectionCollection = new ArrayList<>();
-        ResultSet rs = DBModel.getInstance().executeQuery(_queryPart1 + cat + _queryPart2);
+        ResultSet rs = DBModel.getInstance().executeQuery(
+                _queryPart1 + category +
+                _queryPart2 + title +
+                _queryPart3 + category +
+                _queryPart4 + title +
+                _queryPart5 + category +
+                _queryPart6 + title +
+                _queryPart7
+        );
         while (rs.next()) {
             movieConnectionCollection.add(new MovieConnection(
                     rs.getInt(1),

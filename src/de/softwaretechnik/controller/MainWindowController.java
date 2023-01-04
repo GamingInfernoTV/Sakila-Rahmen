@@ -3,6 +3,7 @@ package de.softwaretechnik.controller;
 import de.softwaretechnik.interfaces.IMainListener;
 import de.softwaretechnik.models.Category;
 import de.softwaretechnik.models.Model;
+import de.softwaretechnik.models.SelectedCategory;
 import de.softwaretechnik.views.MainWindow;
 
 import java.awt.event.*;
@@ -13,6 +14,7 @@ public class MainWindowController extends WindowAdapter implements IMainListener
 
     private MainWindow window;
     private Model model;
+    private SelectedCategory selectedCategory = new SelectedCategory();
 
     public MainWindowController(MainWindow mw, Model m) {
         window = mw;
@@ -62,7 +64,10 @@ public class MainWindowController extends WindowAdapter implements IMainListener
         }
         window.GenreChoice.select(0);
         try {
-            window.drawCategory(window.setCat(window.GenreChoice.getSelectedItem()));
+            int selectedCat = selectedCategory.setCat(window.GenreChoice.getSelectedItem());
+            String selectedTitle = window.textField.getText();
+            System.out.println(selectedTitle + " Title test");
+            window.drawCategory(selectedCat, selectedTitle);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

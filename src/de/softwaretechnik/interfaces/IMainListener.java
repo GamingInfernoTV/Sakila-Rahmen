@@ -7,6 +7,10 @@ public interface IMainListener extends ActionListener, ItemListener, TextListene
     /*
             Interface Methoden definieren für alle Events des Programms
     */
+
+    @Override
+    void actionPerformed(ActionEvent e);
+
     void startProgram();
     void exitProgram();
 
