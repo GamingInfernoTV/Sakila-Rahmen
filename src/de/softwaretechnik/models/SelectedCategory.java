@@ -9,6 +9,9 @@ public class SelectedCategory implements Serializable {
     public int setCat(String s) {
         int cat = 0;
         switch (s) {
+            case "All":
+                cat = 0;
+                break;
             case "Action":
                 cat = 1;
                 break;

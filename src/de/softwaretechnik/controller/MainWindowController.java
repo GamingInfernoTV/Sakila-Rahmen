@@ -59,14 +59,14 @@ public class MainWindowController extends WindowAdapter implements IMainListener
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+        window.genreChoice.add("All");
         for (int i = 0; i < categorys.size();i++ ) {
-            window.GenreChoice.add(String.valueOf(categorys.get(i)));
+            window.genreChoice.add(String.valueOf(categorys.get(i)));
         }
-        window.GenreChoice.select(0);
+        window.genreChoice.select(0);
         try {
-            int selectedCat = selectedCategory.setCat(window.GenreChoice.getSelectedItem());
+            int selectedCat = selectedCategory.setCat(window.genreChoice.getSelectedItem());
             String selectedTitle = window.textField.getText();
-            System.out.println(selectedTitle + " Title test");
             window.drawCategory(selectedCat, selectedTitle);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -74,7 +74,7 @@ public class MainWindowController extends WindowAdapter implements IMainListener
     }
 
     public String getValue() {
-        return window.GenreChoice.getSelectedItem();
+        return window.genreChoice.getSelectedItem();
     }
 
 

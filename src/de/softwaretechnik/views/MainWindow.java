@@ -27,18 +27,18 @@ public class MainWindow extends Frame {
 	}
 	private static Model model = new Model();
 
-	public final Choice GenreChoice = new Choice();
-	public final TextField testfield = new TextField();
+	public final Choice genreChoice = new Choice();
 	public final TextField textField = new TextField();
-	public final TextArea textArea = new TextArea();
+	public final List filmList = new List();
 	public final Button button = new Button();
-	public final Checkbox checkbox = new Checkbox();
+	public final Button frameButton = new Button();
+	private final TextArea textArea = new TextArea();
 	// GUI Elements
-	private MenuBar _menuBar;
+	private final Frame frame = new Frame();
 
 	//information to show
-	private boolean yearBool = false;
-	private boolean durationBool = false;
+	private boolean year = false;
+	private boolean length = false;
 
 
 	private MainWindow() {
@@ -47,26 +47,29 @@ public class MainWindow extends Frame {
 		setBackground(Color.darkGray);
 		setResizable(false);
 		button.setLabel("Search");
-		textArea.setEditable(false);
 		textField.setSize(300, 20);
 
 		Panel panel = new Panel();
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panel.add(textField);
 		textField.setPreferredSize(textField.getSize());
-		panel.add(GenreChoice);
+		panel.add(genreChoice);
 		panel.add(button);
+
+		frameButton.setLabel("Close");
+		frame.setSize(300, 200);
+		frame.setLayout(new BorderLayout());
+		frame.add(frameButton, BorderLayout.NORTH);
 
 		setLayout(new BorderLayout());
 		add(panel,BorderLayout.NORTH);
-		add(textArea, BorderLayout.CENTER);
-		add(checkbox, BorderLayout.SOUTH);
+		add(filmList, BorderLayout.CENTER);
 
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					int selectedCat = selectedCategory.setCat(GenreChoice.getSelectedItem());
+					int selectedCat = selectedCategory.setCat(genreChoice.getSelectedItem());
 					String selectedTitle = textField.getText();
 					drawCategory(selectedCat, selectedTitle);
 				} catch (SQLException ex) {
@@ -74,17 +77,33 @@ public class MainWindow extends Frame {
 				}
 			}
 		});
+		frameButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+			}
+		});
 		textField.addTextListener(new TextListener() {
 			@Override
 			public void textValueChanged(TextEvent e) {
 				try {
-					int selectedCat = selectedCategory.setCat(GenreChoice.getSelectedItem());
+					int selectedCat = selectedCategory.setCat(genreChoice.getSelectedItem());
 					String selectedTitle = textField.getText();
-					drawCategory(selectedCat, selectedTitle);
+					if (selectedTitle.length() > 3) {
+						drawCategory(selectedCat, selectedTitle);
+					}
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
 				System.out.println("textField changed");
+			}
+		});
+		filmList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(true);
+				textArea.setText("");
+				System.out.println(filmList.getSelectedItem());
 			}
 		});
 		createGUI();
@@ -98,7 +117,14 @@ public class MainWindow extends Frame {
 	private MenuBar createMainMenu(){
 		MenuBar menuBar = new MenuBar();
 		Menu menuProgram = new Menu("Program");
-		menuProgram.add(new MenuItem("Beenden") );
+		MenuItem menuItem = new MenuItem("Beenden");
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		menuProgram.add(menuItem);
 
 		menuBar.add(menuProgram);
 
@@ -108,11 +134,17 @@ public class MainWindow extends Frame {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (Year.getState()){
-					yearBool = true;
+					year = true;
 				} else {
-					yearBool = false;
+					year = false;
 				}
-				testfield.setText("Jahre: " + yearBool + " dauer: " + durationBool);
+				int selectedCat = selectedCategory.setCat(genreChoice.getSelectedItem());
+				String selectedTitle = textField.getText();
+				try {
+					drawBoolCategory(selectedCat, selectedTitle, year, length);
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		informationSelection.add(Year);
@@ -121,11 +153,17 @@ public class MainWindow extends Frame {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (duration.getState()){
-					durationBool = true;
+					length = true;
 				} else {
-					durationBool = false;
+					length = false;
 				}
-				testfield.setText("Jahre: " + yearBool + " dauer: " + durationBool);
+				int selectedCat = selectedCategory.setCat(genreChoice.getSelectedItem());
+				String selectedTitle = textField.getText();
+				try {
+					drawBoolCategory(selectedCat, selectedTitle, year, length);
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
 		informationSelection.add(duration);
@@ -135,12 +173,23 @@ public class MainWindow extends Frame {
 	}
 
 	public void drawCategory(int selectedCategory, String selectedTitle) throws SQLException {
-		textArea.setText("");
+		filmList.removeAll();
 		ArrayList<MovieConnection> movieConnections;
 		movieConnections = model.getAllMovieConnections(selectedCategory, selectedTitle);
 		for (int i = 0; i < movieConnections.size(); i++) {
-			textArea.append(String.valueOf(movieConnections.get(i)));
+			filmList.add(String.valueOf(movieConnections.get(i)));
 		}
 	}
+
+	public void drawBoolCategory(int selectedCategory, String selectedTitle, Boolean year, Boolean length) throws SQLException {
+		filmList.removeAll();
+		ArrayList<MovieConnection> movieConnections;
+		movieConnections = model.getAllMovieConnections(selectedCategory, selectedTitle, year, length);
+		for (int i = 0; i < movieConnections.size(); i++) {
+			filmList.add(String.valueOf(movieConnections.get(i)));
+		}
+	}
+
+
 
 }

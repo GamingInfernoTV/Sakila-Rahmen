@@ -24,4 +24,19 @@ public class Model {
     public ArrayList<MovieConnection> getAllMovieConnections(int category, String title) throws SQLException {
         return MovieConnection.readMovieConnections(category, title);
     }
+
+    public ArrayList<MovieConnection> getAllMovieConnections(int category, String title, Boolean year, Boolean length) throws SQLException {
+        if (year && length) {
+            return MovieConnectionYearAndLength.readMovieConnections(category, title);
+        }
+        if (year) {
+            return MovieConnectionYear.readMovieConnections(category, title);
+        }
+        if (length) {
+            return MovieConnectionLength.readMovieConnections(category, title);
+        }
+        else {
+            return null;
+        }
+    }
 }
