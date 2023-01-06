@@ -107,6 +107,9 @@ public class MainWindow extends Frame {
 				StringBuilder sb = new StringBuilder();
 
 				for(int i=7 ; i<movName.length-1;i++){
+					if (movName[i]==' ' && movName[i+1] == '(' || movName[i+1] == '['){
+						break;
+					}
 					sb.append(movName[i]);
 				}
 				String movie = sb.toString();
