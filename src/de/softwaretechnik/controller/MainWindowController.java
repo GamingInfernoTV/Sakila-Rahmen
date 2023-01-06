@@ -11,18 +11,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainWindowController extends WindowAdapter implements IMainListener {
-
-    private MainWindow window;
-    private Model model;
-    private SelectedCategory selectedCategory = new SelectedCategory();
+    private final MainWindow window;
+    private final Model model;
+    private final SelectedCategory selectedCategory = new SelectedCategory();
 
     public MainWindowController(MainWindow mw, Model m) {
         window = mw;
         model = m;
-
         window.addWindowListener(this);
-
-
     }
 
     // ---------------------------------------------------------------------------
@@ -40,28 +36,29 @@ public class MainWindowController extends WindowAdapter implements IMainListener
     // Events
     @Override
     public void actionPerformed(ActionEvent e) {
+        //not used
     }
-
     @Override
     public void itemStateChanged(ItemEvent e) {
+        //not used
     }
-
     @Override
     public void textValueChanged(TextEvent e) {
+        //not used
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
         window.createGUI();
-        ArrayList<Category> categorys;
+        ArrayList<Category> categorys = new ArrayList<>();
         try {
             categorys = model.getAllCategories();
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
         window.genreChoice.add("All");
-        for (int i = 0; i < categorys.size();i++ ) {
-            window.genreChoice.add(String.valueOf(categorys.get(i)));
+        for (Category category : categorys) {
+            window.genreChoice.add(String.valueOf(category));
         }
         window.genreChoice.select(0);
         try {
@@ -69,19 +66,12 @@ public class MainWindowController extends WindowAdapter implements IMainListener
             String selectedTitle = window.textField.getText();
             window.drawCategory(selectedCat, selectedTitle);
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
     }
-
-    public String getValue() {
-        return window.genreChoice.getSelectedItem();
-    }
-
 
     @Override
     public void windowClosing(WindowEvent e){
       exitProgram();
     }
-    // ---------------------------------------------------------------------------
-
 }

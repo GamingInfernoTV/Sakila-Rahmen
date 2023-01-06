@@ -4,47 +4,37 @@ import de.softwaretechnik.program.Program;
 
 import java.sql.*;
 
-/*
-
-    DB Modell als Singelton
- */
+//DBModel als Singleton
 
 public class DBModel {
 
-    private static DBModel instance = new DBModel();
+    private static final DBModel instance = new DBModel();
     private static Connection connection;
     private static Statement statement;
-    ResultSet _resultSet;
+    ResultSet resultSet;
 
 
     private DBModel(){
         try {
-            connection = DriverManager.getConnection(Program.DBCON, "root", "");
+            connection = DriverManager.getConnection(Program.DBCONSOLE, "root", "");
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-    }
-
-    public void query() {
-
-
     }
 
     public static DBModel getInstance(){
         return instance;
     }
 
-
     public ResultSet executeQuery(String query) {
         try {
             statement = connection.createStatement();
-            _resultSet = statement.executeQuery(query);
-
-            return _resultSet;
-
+            resultSet = statement.executeQuery(query);
+            return resultSet;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return null;
     }
 }

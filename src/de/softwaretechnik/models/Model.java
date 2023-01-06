@@ -5,9 +5,7 @@ import java.util.ArrayList;
 
 public class Model {
 
-    /*
-        Gesamte Business Logik der Modelle die für den Controller und die aktuellle View notwendig ist.
-     */
+    //Gesamte Business Logik der Modelle die für den Controller und die aktuelle View notwendig ist.
 
     public ArrayList<Category> getAllCategories() throws SQLException {
         return Category.readCategories();
@@ -36,7 +34,7 @@ public class Model {
             return MovieConnectionLength.readMovieConnections(category, title);
         }
         else {
-            return null;
+            return new ArrayList<>();
         }
     }
 }

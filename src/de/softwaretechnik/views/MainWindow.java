@@ -16,45 +16,38 @@ public class MainWindow extends Frame {
 		Main Window als Singleton.
 		Nur UI/GUI spezifische Implementierungen
 	 */
-
 	// ------------------------------------------------------------------------------------------------
 	// Singleton
-	private static MainWindow window = new MainWindow();
-	private final SelectedCategory selectedCategory = new SelectedCategory();
-
+	private static final MainWindow window = new MainWindow();
+	public final SelectedCategory selectedCategory = new SelectedCategory();
 	public static MainWindow getInstance(){
 		return window;
 	}
-	private static Model model = new Model();
-
+	private static final Model model = new Model();
 	public final Choice genreChoice = new Choice();
 	public final TextField textField = new TextField();
 	public final List filmList = new List();
-	public final Button button = new Button();
+	public final Button searchButton = new Button();
 	public final Button frameButton = new Button();
 	private final TextArea textArea = new TextArea();
-	// GUI Elements
 	private final Frame frame = new Frame();
-
-	//information to show
 	private boolean year = false;
 	private boolean length = false;
 
-
-	private MainWindow() {
+	public MainWindow() {
 		setTitle(Program.APP_TITLE + " [" + Program.APP_V + "]");
-		setSize(500,600);
+		setSize(600,600);
 		setBackground(Color.darkGray);
 		setResizable(false);
-		button.setLabel("Search");
-		textField.setSize(300, 20);
+		searchButton.setLabel("Search");
+		textField.setSize(400, 20);
 
 		Panel panel = new Panel();
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panel.add(textField);
 		textField.setPreferredSize(textField.getSize());
 		panel.add(genreChoice);
-		panel.add(button);
+		panel.add(searchButton);
 
 		frameButton.setLabel("Close");
 		frame.setSize(300, 200);
@@ -67,7 +60,7 @@ public class MainWindow extends Frame {
 		add(textArea, BorderLayout.SOUTH);
 		textArea.setEditable(false);
 
-		button.addActionListener(new ActionListener() {
+		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -97,7 +90,6 @@ public class MainWindow extends Frame {
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
-				System.out.println("textField changed");
 			}
 		});
 		filmList.addActionListener(new ActionListener() {
@@ -117,9 +109,8 @@ public class MainWindow extends Frame {
 				try {
 					description = MovieConnection.findMovie(movie);
 				} catch (SQLException ex) {
-					throw new RuntimeException(ex);
+					ex.printStackTrace();
 				}
-				//frame.setVisible(true);
 				textArea.setText(description);
 
 			}
@@ -136,6 +127,7 @@ public class MainWindow extends Frame {
 		MenuBar menuBar = new MenuBar();
 		Menu menuProgram = new Menu("Program");
 		MenuItem menuItem = new MenuItem("Beenden");
+
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -148,6 +140,7 @@ public class MainWindow extends Frame {
 
 		Menu informationSelection = new Menu("Anzeige");
 		CheckboxMenuItem Year = new CheckboxMenuItem("Erscheinungsjahr");
+
 		Year.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -165,8 +158,10 @@ public class MainWindow extends Frame {
 				}
 			}
 		});
+
 		informationSelection.add(Year);
 		CheckboxMenuItem duration = new CheckboxMenuItem("Filmlänge");
+
 		duration.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -185,7 +180,6 @@ public class MainWindow extends Frame {
 			}
 		});
 		informationSelection.add(duration);
-
 		menuBar.add(informationSelection);
 		return menuBar;
 	}
@@ -194,8 +188,8 @@ public class MainWindow extends Frame {
 		filmList.removeAll();
 		ArrayList<MovieConnection> movieConnections;
 		movieConnections = model.getAllMovieConnections(selectedCategory, selectedTitle);
-		for (int i = 0; i < movieConnections.size(); i++) {
-			filmList.add(String.valueOf(movieConnections.get(i)));
+		for (MovieConnection movieConnection : movieConnections) {
+			filmList.add(String.valueOf(movieConnection));
 		}
 	}
 
@@ -203,11 +197,8 @@ public class MainWindow extends Frame {
 		filmList.removeAll();
 		ArrayList<MovieConnection> movieConnections;
 		movieConnections = model.getAllMovieConnections(selectedCategory, selectedTitle, year, length);
-		for (int i = 0; i < movieConnections.size(); i++) {
-			filmList.add(String.valueOf(movieConnections.get(i)));
+		for (MovieConnection movieConnection : movieConnections) {
+			filmList.add(String.valueOf(movieConnection));
 		}
 	}
-
-
-
 }

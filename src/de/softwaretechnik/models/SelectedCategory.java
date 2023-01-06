@@ -4,65 +4,30 @@ import java.io.Serializable;
 
 public class SelectedCategory implements Serializable {
     public SelectedCategory() {
+        //not used
     }
 
     public int setCat(String s) {
         int cat = 0;
         switch (s) {
-            case "All":
-                cat = 0;
-                break;
-            case "Action":
-                cat = 1;
-                break;
-            case "Animation":
-                cat = 2;
-                break;
-            case "Children":
-                cat = 3;
-                break;
-            case "Classics":
-                cat = 4;
-                break;
-            case "Comedy":
-                cat = 5;
-                break;
-            case "Documentary":
-                cat = 6;
-                break;
-            case "Drama":
-                cat = 7;
-                break;
-            case "Family":
-                cat = 8;
-                break;
-            case "Foreign":
-                cat = 9;
-                break;
-            case "Games":
-                cat = 10;
-                break;
-            case "Horror":
-                cat = 11;
-                break;
-            case "Music":
-                cat = 12;
-                break;
-            case "New":
-                cat = 13;
-                break;
-            case "Sci-Fi":
-                cat = 14;
-                break;
-            case "Sports":
-                cat = 15;
-                break;
-            case "Travel":
-                cat = 16;
-                break;
-            default:
-                System.out.println("ungültige Kategorie!");
-                break;
+            case "All" -> cat = 0;
+            case "Action" -> cat = 1;
+            case "Animation" -> cat = 2;
+            case "Children" -> cat = 3;
+            case "Classics" -> cat = 4;
+            case "Comedy" -> cat = 5;
+            case "Documentary" -> cat = 6;
+            case "Drama" -> cat = 7;
+            case "Family" -> cat = 8;
+            case "Foreign" -> cat = 9;
+            case "Games" -> cat = 10;
+            case "Horror" -> cat = 11;
+            case "Music" -> cat = 12;
+            case "New" -> cat = 13;
+            case "Sci-Fi" -> cat = 14;
+            case "Sports" -> cat = 15;
+            case "Travel" -> cat = 16;
+            default -> System.out.println("ungültige Kategorie!");
         }
         return cat;
     }
