@@ -64,6 +64,8 @@ public class MainWindow extends Frame {
 		setLayout(new BorderLayout());
 		add(panel,BorderLayout.NORTH);
 		add(filmList, BorderLayout.CENTER);
+		add(textArea, BorderLayout.SOUTH);
+		textArea.setEditable(false);
 
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -101,9 +103,22 @@ public class MainWindow extends Frame {
 		filmList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(true);
-				textArea.setText("");
-				System.out.println(filmList.getSelectedItem());
+				char[] movName = filmList.getSelectedItem().toCharArray();
+				StringBuilder sb = new StringBuilder();
+
+				for(int i=7 ; i<movName.length-1;i++){
+					sb.append(movName[i]);
+				}
+				String movie = sb.toString();
+				String description = null;
+				try {
+					description = MovieConnection.findMovie(movie);
+				} catch (SQLException ex) {
+					throw new RuntimeException(ex);
+				}
+				//frame.setVisible(true);
+				textArea.setText(description);
+
 			}
 		});
 		createGUI();

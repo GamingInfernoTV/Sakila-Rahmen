@@ -57,4 +57,14 @@ public class MovieConnection {
     public String toString() {
         return "Movie: " + _filmTitel + '\n';
     }
+
+    public static String findMovie(String movie) throws SQLException {
+        String Info = null;
+        String query = "SELECT description FROM film WHERE title = '" + movie + "' ;";
+        ResultSet rs = DBModel.getInstance().executeQuery(query);
+        while(rs.next()) {
+            Info = rs.getString(1);
+        }
+        return Info;
+    }
 }
